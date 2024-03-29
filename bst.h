@@ -196,6 +196,7 @@ public:
     virtual void remove(const Key &key);                                  // TODO
     void clear();                                                         // TODO
     bool isBalanced() const;                                              // TODO
+    bool isBalancedHelper(Node<Key, Value> *node) const;                  // helper for isbalanced
     void print() const;
     bool empty() const;
 
@@ -493,12 +494,12 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
         // first = key                          // track parent
         if (keyValuePair.first < (*current)->getKey()) // if key is less, go left
         {
-            current = &((*current)->left_);
+            current = &((*current)->getLeft());
         }
         // first = key
         else if (keyValuePair.first > (*current)->getKey()) // if key is more go right
         {
-            current = &((*current)->right_);
+            current = &((*current)->getRight());
         }
         else // if key alr exists update val
         {
@@ -532,14 +533,14 @@ void BinarySearchTree<Key, Value>::remove(const Key &key)
     Node<Key, Value> *nodeToRemove = internalFind(key);
 
     // if cant find node return
-    if (nodetoRemove == nullptr)
+    if (nodeToRemove == nullptr)
     {
         return;
     }
 
     // case: 2 kids
     // if both left and right kids exist
-    if (nodetoRemove->getLeft() != nullptr && nodeToRomve->getRught() != nullptr)
+    if (nodeToRemove->getLeft() != nullptr && nodeToRemove->getRight() != nullptr)
     {
         // find in order predecessor of node
         Node<Key, Value> *predNode = predecessor(nodeToRemove);
@@ -549,10 +550,10 @@ void BinarySearchTree<Key, Value>::remove(const Key &key)
     }
 
     // if left exists, set child to left subtree, else set child to right
-    Node<Key, Value> *child = (nodetoRemove->getLeft() != nullptr) ? nodeToremove->getLeft() : nodeToRemove->getRight();
+    Node<Key, Value> *child = (nodeToRemove->getLeft() != nullptr) ? nodeToRemove->getLeft() : nodeToRemove->getRight();
 
     // if node is the root
-    if (nodetoRemove == root_)
+    if (nodeToRemove == root_)
     {
         root_ = child; // make child new root
         if (child != nullptr)
@@ -564,9 +565,9 @@ void BinarySearchTree<Key, Value>::remove(const Key &key)
     else
     {
         // get parent of one ur removing
-        Node<Key, Value> *parent = nodetoRemove->getParent();
+        Node<Key, Value> *parent = nodeToRemove->getParent();
         // if its a left or right child update the parents child ptr
-        if (parent->getLeft() == nodetoRemove)
+        if (parent->getLeft() == nodeToRemove)
         {
             parent->setLeft(child);
         }
@@ -603,11 +604,11 @@ BinarySearchTree<Key, Value>::predecessor(Node<Key, Value> *current)
         return pred;
     }
     // case 2 go up
-    Node<Key, Value> *parent = current->getPArent();
+    Node<Key, Value> *parent = current->getParent();
     while (parent != nullptr && current == parent->getLeft())
     {
         current = parent;
-        parent = paren->getParent();
+        parent = parent->getParent();
     }
     return parent;
 }
