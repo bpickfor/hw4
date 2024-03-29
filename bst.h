@@ -196,7 +196,6 @@ public:
     virtual void remove(const Key &key);                                  // TODO
     void clear();                                                         // TODO
     bool isBalanced() const;                                              // TODO
-    bool isBalancedHelper(Node<Key, Value> *node) const;                  // helper for isbalanced
     void print() const;
     bool empty() const;
 
@@ -246,7 +245,7 @@ protected:
     virtual void nodeSwap(Node<Key, Value> *n1, Node<Key, Value> *n2);
 
     // Add helper functions here
-
+    bool isBalancedHelper(Node<Key, Value> *node) const; // helper for isbalanced
 protected:
     Node<Key, Value> *root_;
     // You should not need other data members
@@ -482,35 +481,50 @@ template <class Key, class Value>
 void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &keyValuePair)
 {
     //^takes in pair object named keyValuePair
+    // if tree empty make new node and make a root and finish
+    if (!root_)
+    {
+        root_ = new Node<Key, Value>(keyValuePair.first, keyValuePair.second, nullptr);
+        return;
+    }
 
     // TODO
-    Node<Key, Value> **current = &root_; // start from root, using ptr to node ptr
-    Node<Key, Value> *parent = nullptr;  // keeps track of par node
+    Node<Key, Value> *current = root_;  // tracks curr node, start from root
+    Node<Key, Value> *parent = nullptr; // keeps track of par node
 
     // go thru tree to find correct posit for new node
-    while (*current != nullptr)
+    while (current != nullptr)
     {
-        parent = *current;
+        parent = current; // track parent node
         // first = key                          // track parent
-        if (keyValuePair.first < (*current)->getKey()) // if key is less, go left
+        if (keyValuePair.first < current->getKey()) // if key is less, go left
         {
-            current = &((*current)->getLeft());
+            current = current->getLeft();
         }
         // first = key
-        else if (keyValuePair.first > (*current)->getKey()) // if key is more go right
+        else if (keyValuePair.first > current->getKey()) // if key is greater than go right
         {
-            current = &((*current)->getRight());
+            current = current->getRight();
         }
         else // if key alr exists update val
         {
-            // second = value
-            (*current)->setValue(keyValuePair.second);
+            // update val and return
+            //  second = value
+            current->setValue(keyValuePair.second);
             return; // exit funct
         }
     }
-    // if reach null ptr, in correct posit for new node
-    // make a new node with key and val and set parent
-    *current = new Node<Key, Value>(keyValuePair.first, keyValuePair.second, parent);
+
+    // insert new node as child of parent node
+    if (keyValuePair.first < parent->getKey())
+    {
+        parent->setLeft(new Node<Key, Value>(keyValuePair.first, keyValuePair.second, parent));
+    }
+    else
+    {
+        parent->setRight(new Node<Key, Value>(keyValuePair.first, keyValuePair.second, parent));
+    }
+
     // first = key, second = value
 }
 
