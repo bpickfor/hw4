@@ -250,9 +250,7 @@ protected:
 
 protected:
     Node<Key, Value> *root_;
-
-    static int heightOfNode(const Node<Key, Value> *node); // heightOfNode helper
-    static int heightOfNode(const Node<Key, Value> *node)
+    static int heightOfNode(const Node<Key, Value> *node) // height of node helper
     {
         if (node == nullptr)
         {
@@ -717,15 +715,6 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
 {
     // TODO
     return isBalancedHelper(root_);
-}
-
-// get height helper used for isbalanced, needs to be placed before
-template <typename Key, typename Value>
-int heightOfNode(const Node<Key, Value> *node)
-{
-    if (node == nullptr)
-        return -1;
-    return 1 + std::max(heightOfNode(node->getLeft()), heightOfNode(node->getRight()));
 }
 
 // helper for balanced
