@@ -34,6 +34,8 @@ public:
     void setLeft(Node<Key, Value> *left);
     void setRight(Node<Key, Value> *right);
     void setValue(const Value &value);
+    // helper, will be used in avl
+    void setKey(const Key &newKey);
 
 protected:
     std::pair<const Key, Value> item_;
@@ -175,6 +177,13 @@ template <typename Key, typename Value>
 void Node<Key, Value>::setValue(const Value &value)
 {
     item_.second = value;
+}
+
+// helper for setting key
+template <typename Key, typename Value>
+void setKey(const Key &newKey)
+{
+    this->item_.first = newKey;
 }
 
 /*
