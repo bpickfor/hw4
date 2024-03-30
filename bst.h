@@ -178,14 +178,6 @@ void Node<Key, Value>::setValue(const Value &value)
 {
     item_.second = value;
 }
-
-// helper for setting key
-template <typename Key, typename Value>
-void setKey(const Key &newKey)
-{
-    this->item_.first = newKey;
-}
-
 /*
   ---------------------------------------
   End implementations for the Node class.
@@ -255,8 +247,19 @@ protected:
 
     // Add helper functions here
     bool isBalancedHelper(Node<Key, Value> *node) const; // helper for isbalanced
+
 protected:
     Node<Key, Value> *root_;
+
+    static int heightOfNode(const Node<Key, Value> *node); // heightOfNode helper
+    static int heightOfNode(const Node<Key, Value> *node)
+    {
+        if (node == nullptr)
+        {
+            return -1;
+        }
+        return 1 + std::max(heightOfNode(node->getLeft()), heightOfNode(node->getRight()));
+    }
     // You should not need other data members
 };
 
@@ -716,6 +719,15 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
     return isBalancedHelper(root_);
 }
 
+// get height helper used for isbalanced, needs to be placed before
+template <typename Key, typename Value>
+int heightOfNode(const Node<Key, Value> *node)
+{
+    if (node == nullptr)
+        return -1;
+    return 1 + std::max(heightOfNode(node->getLeft()), heightOfNode(node->getRight()));
+}
+
 // helper for balanced
 template <typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key, Value> *node) const
@@ -724,20 +736,11 @@ bool BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key, Value> *node) cons
         return true;
 
     int leftHeight = heightOfNode(node->getLeft());
-    int rightHeight = heighOfRight(node->getRight());
+    int rightHeight = heightOfNode(node->getRight());
 
     if (std::abs(leftHeight - rightHeight) > 1)
         return false;
-    return isBalancedHelper(node->getLeft()) && isBalanced(node->getRight());
-}
-
-// get height helper used for isbalanced
-template <typename Key, typename Value>
-int heightOfNode(const Node<Key, Value> *node)
-{
-    if (node == nullptr)
-        return -1;
-    return 1 + std::max(heightOfNode(node->getLeft()), heightOfNode(node->getRight()));
+    return isBalancedHelper(node->getLeft()) && isBalancedHelper(node->getRight());
 }
 
 template <typename Key, typename Value>
