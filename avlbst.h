@@ -385,7 +385,7 @@ template <class Key, class Value>
 void AVLTree<Key, Value>::remove(const Key &key)
 {
     // TODO
-    AVLNode<Key, Value> *n = static_cast<AVLNode<Key, Value> *>(internalFind(key));
+    AVLNode<Key, Value> *n = static_cast<AVLNode<Key, Value> *>(this->internalFind(key));
     if (n == nullptr)
     {
         // not found
@@ -395,7 +395,7 @@ void AVLTree<Key, Value>::remove(const Key &key)
     // 2 children
     if (n->getLeft() != nullptr && n->getRight() != nullptr)
     {
-        AVLNode<Key, Value> *pred = static_cast<AVLNode<Key, Value> *>(predecessor(n));
+        AVLNode<Key, Value> *pred = static_cast<AVLNode<Key, Value> *>(this->predecessor(n));
         nodeSwap(n, pred);
         n = pred; // max 1 child now
     }
