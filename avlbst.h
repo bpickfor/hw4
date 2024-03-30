@@ -600,7 +600,7 @@ void AVLTree<Key, Value>::rotateRight(AVLNode<Key, Value> *node)
     leftChild->setRight(node);
     node->setParent(leftChild);
 }
-
+ 
 template <class Key, class Value>
 void AVLTree<Key, Value>::nodeSwap(AVLNode<Key, Value> *n1, AVLNode<Key, Value> *n2)
 {
